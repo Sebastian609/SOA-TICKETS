@@ -118,6 +118,7 @@ describe("TicketService", () => {
 
       const mockTicket = {
         id: 1,
+        eventLocationId: 1,
         code: "ABC12345",
         isUsed: false,
         isActive: true,
@@ -157,6 +158,7 @@ describe("TicketService", () => {
 
       const mockTicket = {
         id: 1,
+        eventLocationId: 1,
         code: "ABC12345",
         isUsed: true,
         isActive: true,

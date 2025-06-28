@@ -43,9 +43,13 @@ export class TicketController {
 
   async updateTicket(req: Request, res: Response) {
     try {
-      const data = plainToInstance(UpdateTicketDto, req.body, {
+      console.log(req.body);
+      
+      const data: UpdateTicketDto = plainToInstance(UpdateTicketDto, req.body, {
         excludeExtraneousValues: true 
       });
+      
+
       const updatedTicket = await this.ticketService.updateTicket(data);
       res.status(200).json(updatedTicket);
     } catch (error) {
@@ -103,6 +107,8 @@ export class TicketController {
     }
   }
 
+
+
   async getTicketsByEventLocation(req: Request, res: Response) {
     try {
       const { eventLocationId } = req.params;
@@ -113,6 +119,7 @@ export class TicketController {
       res.status(400).json({ message: error.message });
     }
   }
+
 
   async getUnusedTickets(req: Request, res: Response) {
     try {

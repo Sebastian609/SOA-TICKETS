@@ -217,48 +217,6 @@ export class TicketRoutes {
 
     /**
      * @swagger
-     * /tickets/{id}:
-     *   get:
-     *     summary: Obtener ticket por ID
-     *     tags: [Tickets]
-     *     parameters:
-     *       - in: path
-     *         name: id
-     *         required: true
-     *         schema:
-     *           type: integer
-     *           example: 1
-     *     responses:
-     *       200:
-     *         description: Ticket encontrado
-     *       400:
-     *         description: Ticket no encontrado o ID inválido
-     */
-    this.router.get("/:id", this.controller.getTicketById.bind(this.controller));
-
-    /**
-     * @swagger
-     * /tickets/code/{code}:
-     *   get:
-     *     summary: Obtener ticket por código
-     *     tags: [Tickets]
-     *     parameters:
-     *       - in: path
-     *         name: code
-     *         required: true
-     *         schema:
-     *           type: string
-     *           example: "ABC12345"
-     *     responses:
-     *       200:
-     *         description: Ticket encontrado
-     *       400:
-     *         description: Ticket no encontrado o código inválido
-     */
-    this.router.get("/code/:code", this.controller.getTicketByCode.bind(this.controller));
-
-    /**
-     * @swagger
      * /tickets/event-location/{eventLocationId}:
      *   get:
      *     summary: Obtener tickets por ubicación de evento
@@ -277,6 +235,28 @@ export class TicketRoutes {
      *         description: Error al obtener los tickets
      */
     this.router.get("/event-location/:eventLocationId", this.controller.getTicketsByEventLocation.bind(this.controller));
+
+
+    /**
+     * @swagger
+     * /tickets/{id}:
+     *   get:
+     *     summary: Obtener ticket por ID
+     *     tags: [Tickets]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *           example: 1
+     *     responses:
+     *       200:
+     *         description: Ticket encontrado
+     *       400:
+     *         description: Ticket no encontrado o ID inválido
+     */
+    this.router.get("/:id", this.controller.getTicketById.bind(this.controller));
 
     /**
      * @swagger

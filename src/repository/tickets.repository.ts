@@ -96,6 +96,8 @@ export class TicketRepository implements IBaseRepository<Ticket> {
     });
   }
 
+
+
   async findByEventLocation(eventLocationId: number): Promise<Ticket[]> {
     return this.repository.find({ 
       where: { 
@@ -104,6 +106,8 @@ export class TicketRepository implements IBaseRepository<Ticket> {
       } 
     });
   }
+
+ 
 
   async findActiveTickets(): Promise<Ticket[]> {
     return this.repository.find({ 

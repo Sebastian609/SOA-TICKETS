@@ -4,8 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+
 } from "typeorm";
 
 @Entity("tbl_tickets")
@@ -13,7 +12,7 @@ export class Ticket {
   @PrimaryGeneratedColumn({ name: "ticket_id" })
   id: number;
 
-  @Column({ name: "event_location_id", nullable: true })
+  @Column({ name: "event_location_id", nullable: false })
   eventLocationId: number;
 
   @Column({ name: "code", length: 255, nullable: true, unique: true })

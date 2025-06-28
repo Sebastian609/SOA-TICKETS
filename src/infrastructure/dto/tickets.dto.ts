@@ -1,10 +1,17 @@
 import { Expose } from "class-transformer";
-import { IsNotEmpty, IsString, IsNumber, IsOptional, IsBoolean, IsDateString } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsDateString,
+} from "class-validator";
 
 export class CreateTicketDto {
   @IsNotEmpty()
   @IsNumber()
-  @Expose({ name: "event_location_id" })
+  @Expose()
   eventLocationId: number;
 }
 
@@ -14,9 +21,9 @@ export class UpdateTicketDto {
   @Expose()
   id: number;
 
+  @Expose()
   @IsNumber()
   @IsOptional()
-  @Expose({ name: "event_location_id" })
   eventLocationId?: number;
 
   @IsString()
@@ -24,19 +31,19 @@ export class UpdateTicketDto {
   @Expose()
   code?: string;
 
+  @Expose()
   @IsBoolean()
   @IsOptional()
-  @Expose({ name: "is_used" })
   isUsed?: boolean;
 
+  @Expose()
   @IsDateString()
   @IsOptional()
-  @Expose({ name: "used_at" })
   usedAt?: string;
 
+  @Expose()
   @IsBoolean()
   @IsOptional()
-  @Expose({ name: "is_active" })
   isActive?: boolean;
 }
 
@@ -50,11 +57,11 @@ export class UseTicketDto {
 export class GenerateTicketsDto {
   @IsNotEmpty()
   @IsNumber()
-  @Expose({ name: "event_location_id" })
+  @Expose()
   eventLocationId: number;
 
   @IsNotEmpty()
   @IsNumber()
   @Expose()
   quantity: number;
-} 
+}

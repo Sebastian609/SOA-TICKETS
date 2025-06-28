@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS `tbl_tickets` (
   `is_active` tinyint DEFAULT '1',
   `deleted` tinyint DEFAULT '0',
   PRIMARY KEY (`ticket_id`),
-  UNIQUE KEY `uk_code` (`code`),
   KEY `event_location_id` (`event_location_id`),
   CONSTRAINT `tbl_tickets_ibfk_1` FOREIGN KEY (`event_location_id`) REFERENCES `tbl_event_locations` (`event_location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -34,6 +33,25 @@ CREATE TABLE IF NOT EXISTS `tbl_event_locations` (
   `deleted` tinyint DEFAULT '0',
   PRIMARY KEY (`event_location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Create users table (if it doesn't exist)
+CREATE TABLE IF NOT EXISTS `tbl_users` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_active` tinyint DEFAULT '1',
+  `deleted` tinyint DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `uk_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Insert sample data
+INSERT INTO `tbl_users` (`name`, `email`) VALUES
+('Juan Pérez', 'juan@example.com'),
+('María García', 'maria@example.com'),
+('Carlos López', 'carlos@example.com');
 
 -- Insert sample event location
 INSERT INTO `tbl_event_locations` (`name`, `address`, `capacity`) VALUES
