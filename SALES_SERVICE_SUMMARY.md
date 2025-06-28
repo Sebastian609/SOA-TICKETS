@@ -222,7 +222,7 @@ src/
 - ✅ **Servicio Único**: Solo maneja ventas, sin usuarios/roles/sockets
 
 ### 🎯 Características Principales
-- ✅ Gestión completa de ventas y detalles
+- ✅ Gestión completa de ventas y detalles.
 - ✅ API RESTful bien documentada
 - ✅ Validación robusta de datos
 - ✅ Manejo de errores consistente
