@@ -1,41 +1,45 @@
 import express from "express";
 import { createServer } from "http";
-import { TicketController } from "./infrastructure/controller/ticket.controller";
-import { TicketRoutes } from "./routes/ticket.routes";
-import { TicketService } from "./service/ticket.service";
-import { TicketRepository } from "./repository/tickets.repository";
-import { Ticket } from "./infrastructure/entity/tickets.entity";
+import { SalesController } from "./infrastructure/controller/sales.controller";
+import { SalesRoutes } from "./routes/sales.routes";
+import { SalesService } from "./service/sales.service";
+import { SalesRepository } from "./repository/sales.repository";
+import { Sale } from "./infrastructure/entity/sales.entity";
+import { SaleDetail } from "./infrastructure/entity/sale-details.entity";
 import { AppDataSource } from "./infrastructure/database/database";
 import { setupSwagger } from "./config/swagger";
 
-const PORT = 2225;
+const PORT = 2226;
 const app = express();
 const httpServer = createServer(app);
 setupSwagger(app);
 
-// Initialize ticket repository and service
-const ticketRepository = new TicketRepository(AppDataSource.getRepository(Ticket));
-const ticketService = new TicketService(ticketRepository);
+// Initialize sales repository and service
+const salesRepository = new SalesRepository(
+  AppDataSource.getRepository(Sale),
+  AppDataSource.getRepository(SaleDetail)
+);
+const salesService = new SalesService(salesRepository);
 
-// Initialize ticket controller and routes
-const ticketController = new TicketController(ticketService);
-const ticketRoutes = new TicketRoutes(ticketController);
+// Initialize sales controller and routes
+const salesController = new SalesController(salesService);
+const salesRoutes = new SalesRoutes(salesController);
 
 app.use(express.json());
 
-// API Routes - Only tickets
-app.use("/api/tickets", ticketRoutes.getRoutes());
+// API Routes - Only sales
+app.use("/api/sales", salesRoutes.getRoutes());
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "OK",
-    message: "SOA Tickets API is running",
+    message: "SOA Sales API is running",
     timestamp: new Date().toISOString()
   });
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`🚀 SOA Tickets API running on port ${PORT}`);
+  console.log(`🚀 SOA Sales API running on port ${PORT}`);
   console.log(`📚 Swagger documentation available at http://localhost:${PORT}/api-docs`);
 });

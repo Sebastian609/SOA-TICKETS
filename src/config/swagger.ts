@@ -9,71 +9,97 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "SOA Tickets API - Sistema de Gestión de Tickets",
+      title: "SOA Sales API - Sistema de Gestión de Ventas",
       version: "1.0.0",
-      description: "API para la gestión completa de tickets de eventos",
+      description: "API para la gestión completa de ventas y sus detalles",
     },
     components: {
       schemas: {
-        // Ticket DTOs
-        CreateTicketDto: {
+        // Sale DTOs
+        CreateSaleDetailDto: {
           type: "object",
-          required: ["eventLocationId"],
+          required: ["amount"],
           properties: {
-            eventLocationId: { type: "integer", example: 1, description: "ID de la ubicación del evento" },
+            ticketId: { type: "integer", example: 1, description: "ID del ticket asociado (opcional)" },
+            amount: { type: "number", example: 25.50, description: "Monto del detalle de venta" },
           },
         },
-        UpdateTicketDto: {
+        CreateSaleDto: {
+          type: "object",
+          required: ["totalAmount", "saleDetails"],
+          properties: {
+            userId: { type: "integer", example: 1, description: "ID del usuario (opcional)" },
+            partnerId: { type: "integer", example: 1, description: "ID del partner (opcional)" },
+            totalAmount: { type: "number", example: 100.00, description: "Monto total de la venta" },
+            saleDetails: { 
+              type: "array", 
+              items: { $ref: "#/components/schemas/CreateSaleDetailDto" },
+              description: "Lista de detalles de la venta"
+            },
+          },
+        },
+        UpdateSaleDto: {
           type: "object",
           required: ["id"],
           properties: {
-            id: { type: "integer", example: 1, description: "ID del ticket" },
-            eventLocationId: { type: "integer", example: 1, description: "ID de la ubicación del evento" },
-            code: { type: "string", example: "ABC12345", description: "Código único del ticket" },
-            isUsed: { type: "boolean", example: false, description: "Indica si el ticket ha sido usado" },
-            usedAt: { type: "string", format: "date-time", example: "2024-01-15T10:30:00Z", description: "Fecha y hora de uso del ticket" },
-            isActive: { type: "boolean", example: true, description: "Indica si el ticket está activo" },
+            id: { type: "integer", example: 1, description: "ID de la venta" },
+            userId: { type: "integer", example: 1, description: "ID del usuario" },
+            partnerId: { type: "integer", example: 1, description: "ID del partner" },
+            totalAmount: { type: "number", example: 100.00, description: "Monto total de la venta" },
+            isActive: { type: "boolean", example: true, description: "Indica si la venta está activa" },
           },
         },
-        UseTicketDto: {
+        UpdateSaleDetailDto: {
           type: "object",
-          required: ["code"],
+          required: ["id"],
           properties: {
-            code: { type: "string", example: "ABC12345", description: "Código del ticket a usar" },
+            id: { type: "integer", example: 1, description: "ID del detalle de venta" },
+            ticketId: { type: "integer", example: 1, description: "ID del ticket asociado" },
+            amount: { type: "number", example: 25.50, description: "Monto del detalle de venta" },
+            isActive: { type: "boolean", example: true, description: "Indica si el detalle está activo" },
           },
         },
-        GenerateTicketsDto: {
-          type: "object",
-          required: ["eventLocationId", "quantity"],
-          properties: {
-            eventLocationId: { type: "integer", example: 1, description: "ID de la ubicación del evento" },
-            quantity: { type: "integer", example: 100, description: "Cantidad de tickets a generar (máximo 1000)" },
-          },
-        },
-        // Ticket Entity
-        Ticket: {
+        // Sale Entity
+        Sale: {
           type: "object",
           properties: {
-            id: { type: "integer", example: 1, description: "ID único del ticket" },
-            eventLocationId: { type: "integer", example: 1, description: "ID de la ubicación del evento" },
-            code: { type: "string", example: "ABC12345", description: "Código único del ticket" },
-            usedAt: { type: "string", format: "date-time", example: "2024-01-15T10:30:00Z", description: "Fecha y hora de uso del ticket" },
-            isUsed: { type: "boolean", example: false, description: "Indica si el ticket ha sido usado" },
-            createdAt: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z", description: "Fecha de creación del ticket" },
+            id: { type: "integer", example: 1, description: "ID único de la venta" },
+            userId: { type: "integer", example: 1, description: "ID del usuario" },
+            partnerId: { type: "integer", example: 1, description: "ID del partner" },
+            totalAmount: { type: "number", example: 100.00, description: "Monto total de la venta" },
+            createdAt: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z", description: "Fecha de creación de la venta" },
             updatedAt: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z", description: "Fecha de última actualización" },
-            isActive: { type: "boolean", example: true, description: "Indica si el ticket está activo" },
-            deleted: { type: "boolean", example: false, description: "Indica si el ticket está eliminado (soft delete)" },
+            isActive: { type: "boolean", example: true, description: "Indica si la venta está activa" },
+            deleted: { type: "boolean", example: false, description: "Indica si la venta está eliminada (soft delete)" },
+            saleDetails: { 
+              type: "array", 
+              items: { $ref: "#/components/schemas/SaleDetail" },
+              description: "Detalles de la venta"
+            },
           },
         },
-        // Ticket Statistics
-        TicketStatistics: {
+        // Sale Detail Entity
+        SaleDetail: {
           type: "object",
           properties: {
-            total: { type: "integer", example: 1000, description: "Total de tickets" },
-            used: { type: "integer", example: 750, description: "Tickets utilizados" },
-            unused: { type: "integer", example: 250, description: "Tickets no utilizados" },
-            active: { type: "integer", example: 950, description: "Tickets activos" },
-            usageRate: { type: "number", format: "float", example: 75.0, description: "Porcentaje de uso de tickets" },
+            id: { type: "integer", example: 1, description: "ID único del detalle de venta" },
+            saleId: { type: "integer", example: 1, description: "ID de la venta" },
+            ticketId: { type: "integer", example: 1, description: "ID del ticket asociado" },
+            amount: { type: "number", example: 25.50, description: "Monto del detalle" },
+            createdAt: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z", description: "Fecha de creación del detalle" },
+            updatedAt: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z", description: "Fecha de última actualización" },
+            isActive: { type: "boolean", example: true, description: "Indica si el detalle está activo" },
+            deleted: { type: "boolean", example: false, description: "Indica si el detalle está eliminado (soft delete)" },
+          },
+        },
+        // Sales Statistics
+        SalesStatistics: {
+          type: "object",
+          properties: {
+            totalSales: { type: "integer", example: 1000, description: "Total de ventas" },
+            activeSales: { type: "integer", example: 950, description: "Ventas activas" },
+            totalRevenue: { type: "number", example: 50000.00, description: "Ingresos totales" },
+            averageSaleAmount: { type: "number", example: 50.00, description: "Monto promedio por venta" },
           },
         },
         // Error Response
@@ -95,7 +121,7 @@ const options = {
     },
     servers: [
       {
-         url: process.env.SWAGGER_SERVER_URL || 'http://localhost:2225/api',
+         url: process.env.SWAGGER_SERVER_URL || 'http://localhost:2226/api',
       },
     ],
   },
